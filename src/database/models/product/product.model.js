@@ -12,29 +12,23 @@ const ProductSchema = new Schema(
       type: String,
       required: true,
     },
-    max_sale: {
-      type: Number,
-    },
-    brand_id: {
-      type: mongoose.Types.ObjectId,
-      ref: "brand",
-      required: true,
-      autopopulate: { select: "brand_name" },
+    img: {
+      type: String,
     },
     category_id: {
       type: mongoose.Types.ObjectId,
       ref: "category",
-      required: true,
+      // required: true,
       autopopulate: { select: "category_name" },
     },
-    thumbnail: {
-      type: String,
+    discount: {
+      type: Number,
     },
-    fromPrice: {
-      type: String,
+    priceRoot: {
+      type: Number,
     },
-    toPrice: {
-      type: String,
+    quantity: {
+      type: Number,
     },
     is_locked: {
       type: Boolean,

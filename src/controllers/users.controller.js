@@ -10,20 +10,6 @@ const login = async (req, res) => {
   }
 };
 
-// func Validate register
-const validate = (data) => {
-  const rule = Joi.object({
-    fullname: Joi.string().min(6).max(225).required(),
-    email: Joi.string().min(6).max(225).required(),
-    password: Joi.string()
-      .pattern(new RegExp("^[a-zA-Z0-9]{6,20}$"))
-      .required(),
-    isAdmin: Joi.boolean(),
-    phone: Joi.number(),
-  });
-  return rule.validate(data);
-};
-
 const register = async (req, res) => {
   try {
     const body = req.body;
@@ -47,7 +33,9 @@ const register = async (req, res) => {
     return res.status(200).json({ message: "register success", user });
   } catch (error) {
     console.log(error);
-    res.status(400).json({ message: "Đã có lỗi xảy ra vui lòng thử lại", error });
+    res
+      .status(400)
+      .json({ message: "Đã có lỗi xảy ra vui lòng thử lại", error });
   }
 };
 

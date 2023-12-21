@@ -1,6 +1,5 @@
 import billDetailModel from "../database/models/bill-detail.model";
 import billModel from "../database/models/bill.model";
-import productDetailModel from "../database/models/product/product-detail.model";
 import { getBillNotify } from "../helpers/mailTemplate";
 import { responseError, responseSuccess } from "../helpers/response";
 import billDetailRepository from "../repositories/bill-detail.repository";
@@ -94,7 +93,6 @@ export const getOne = async (req, res) => {
       _id: order._id,
       bill_id: order.bill_id._id,
       createdAt: order.createdAt,
-      productDetail_id: order.product_id._id,
       product_name: order.product_id.product_id.name,
       price: order.product_id.price,
       size: order.product_id.size_id.size_name,
@@ -125,7 +123,6 @@ export const getBillDetailById = async (req, res) => {
       _id: order._id,
       bill_id: order.bill_id._id,
       createdAt: order.createdAt,
-      productDetail_id: order.product_id._id,
       product_name: order.product_id.product_id.name,
       price: order.product_id.price,
       size: order.product_id.size_id.size_name,
@@ -160,23 +157,10 @@ export const create = async (req, res) => {
     };
     const data = await billRepository.create(formBody);
 
-    products.forEach(async ({ cart_id }) => {
-      await cartRepository.delete(cart_id);
-    });
     const billDetails = products.map(({ cart_id, ...product }) => {
       return { bill_id: data.id, ...product };
     });
-    products.forEach(async (product) => {
-      const currentProduct = await productDetailModel.findById(
-        product.product_id
-      );
-      const quantity = currentProduct?.quantity - product?.quantity;
-      await productDetailModel.findByIdAndUpdate(
-        product.product_id,
-        { quantity },
-        { new: true }
-      );
-    });
+
     await billDetailRepository.saveMultiple(billDetails);
     const response = {
       data,
@@ -207,26 +191,6 @@ export const update = async (req, res) => {
     }
     await paymentRepository.update(payment_id, { status: payment_status });
 
-    // if PACKING subtraction quantity in product detail
-    if (formBody.status === "CANCELED") {
-      products.forEach(async (product) => {
-        const currentProduct = await productDetailModel.findById(
-          product.productDetail_id
-        );
-        console.log("currentProduct: ", currentProduct);
-        const currentQuantity =
-          currentProduct?.quantity === -1 ? 0 : currentProduct?.quantity;
-        const quantity = currentQuantity + product?.quantity;
-        console.log("quantity: ", quantity);
-        console.log("product?.quantity: ", product?.quantity);
-        await productDetailModel.findByIdAndUpdate(
-          product.productDetail_id,
-          { quantity },
-          { new: true }
-        );
-      });
-    }
-
     const response = {
       data,
       message: "Cập nhật hóa đơn thành công",
@@ -245,25 +209,6 @@ export const updateStatus = async (req, res) => {
     const data = await billRepository.update(id, body);
 
     const billDetail = await billDetailRepository.find({ bill_id: id });
-    console.log(body);
-    billDetail.forEach(async (product) => {
-      const currentProduct = await productDetailModel.findById(
-        product.product_id
-      );
-
-      var quantity;
-      if (body.status === "CANCELED") {
-        quantity = currentProduct.quantity + product.quantity;
-      } else {
-        quantity = currentProduct.quantity;
-      }
-
-      await productDetailModel.findByIdAndUpdate(
-        product.product_id,
-        { quantity },
-        { new: true }
-      );
-    });
 
     const response = {
       data,

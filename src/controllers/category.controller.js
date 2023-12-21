@@ -1,14 +1,15 @@
-import { responseError, responseSuccess } from "../../helpers/response";
-import brandRepository from "../../repositories/product/brand.repository";
+import { responseError, responseSuccess } from "../helpers/response";
+import categoryRepository from "../repositories/category.repository";
 
-// [GET] api/brand
+// [GET] api/category
 export const read = async (req, res) => {
   try {
-    const data = await brandRepository.read();
+    const is_locked = req.query.is_locked || false;
 
+    const data = await categoryRepository.find({ is_locked });
     const response = {
       data,
-      message: "Lấy danh sách thương hiệu thành công",
+      message: "Lấy danh sách danh mục thành công ",
     };
 
     return responseSuccess(res, response);
@@ -16,16 +17,16 @@ export const read = async (req, res) => {
     return responseError(res, error);
   }
 };
-// [POST] api/brand/:id
 
+// [POST] api/category/:id
 export const create = async (req, res) => {
   try {
     const body = req.body;
-    const data = await brandRepository.create(body);
+    const data = await categoryRepository.create(body);
 
     const response = {
       data,
-      message: "Tạo thương hiệu thành công",
+      message: "Tạo danh mục thành công ",
     };
 
     return responseSuccess(res, response);
@@ -34,16 +35,16 @@ export const create = async (req, res) => {
   }
 };
 
-// [POST] api/brand/:id
+// [POST] api/category/:id
 export const update = async (req, res) => {
   try {
     const body = req.body;
     const { id } = req.params;
-    const data = await brandRepository.update(id, body);
+    const data = await categoryRepository.update(id, body);
 
     const response = {
       data,
-      message: "Cập nhật thương hiệu thành công",
+      message: "Cập nhật danh mục thành công",
     };
 
     return responseSuccess(res, response);
@@ -52,15 +53,16 @@ export const update = async (req, res) => {
   }
 };
 
-// [GET] api/brand/:id
+// [GET] api/category/:id
 export const findOne = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const data = await brandRepository.findById(id);
+    const data = await categoryRepository.findById(id);
+
     const response = {
       data,
-      message: "Lấy thương hiệu thành công",
+      message: "Lấy danh mục thành công ",
     };
 
     return responseSuccess(res, response);
@@ -69,17 +71,16 @@ export const findOne = async (req, res) => {
   }
 };
 
-// [DELETE] api/brand/remove/:id
+// [DELETE] api/category/remove/:id
 export const remove = async (req, res) => {
   try {
     const { id } = req.params;
-    const data = await brandRepository.delete(id);
+    const data = await categoryRepository.delete(id);
 
     const response = {
       data,
-      message: "Xóa thương hiệu thành công",
+      message: "Xóa danh mục thành công ",
     };
-
     return responseSuccess(res, response);
   } catch (error) {
     return responseError(res, error);

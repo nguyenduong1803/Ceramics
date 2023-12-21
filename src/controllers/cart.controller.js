@@ -1,6 +1,5 @@
 import { responseError, responseSuccess } from "../helpers/response";
 import cartRepository from "../repositories/cart.repository";
-import productDetail from "../database/models/product/product-detail.model";
 import { json } from "express";
 import { STATUS } from "../configs/status";
 
@@ -44,11 +43,9 @@ export const create = async (req, res) => {
     const body = req.body;
     const product_id = body.product_id;
     const hasCart = await cartRepository.findOne({ product_id });
-    const dataDetail = await productDetail.findOne({ _id: product_id });
     let data;
 
-    if (hasCart && dataDetail) {
-      const detailQuantity = dataDetail.quantity;
+    if (hasCart) {
       if (hasCart.quantity === MAX_QUANTITY) {
         const response = {
           data: null,
@@ -57,22 +54,8 @@ export const create = async (req, res) => {
         return res.status(STATUS.BAD_REQUEST).send(response);
       }
 
-      if (detailQuantity <= MAX_QUANTITY) {
-        if (body.quantity > detailQuantity) {
-          return res.status(STATUS.BAD_REQUEST).send({
-            data: null,
-            message: "Số lượng trong giỏ hàng lớn hơn số lượng hàng trong kho.",
-          });
-        }
-      }
-
       const totalQuantity = body.quantity + hasCart.quantity;
-      if (totalQuantity > detailQuantity) {
-        return res.status(STATUS.BAD_REQUEST).send({
-          data: null,
-          message: "Số lượng trong giỏ hàng vượt quá số lượng trong kho.",
-        });
-      }
+ 
 
       if (totalQuantity > MAX_QUANTITY) {
         return res.status(STATUS.BAD_REQUEST).send({

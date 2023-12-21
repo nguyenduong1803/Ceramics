@@ -1,5 +1,5 @@
-import productModel from "../../database/models/product/product.model";
-import BaseRepository from "../../helpers/BaseRepository";
+import productModel from "../database/models/product/product.model";
+import BaseRepository from "../helpers/BaseRepository";
 
 class ProductRepository extends BaseRepository {
   constructor(props) {

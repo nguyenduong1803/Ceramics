@@ -39,6 +39,7 @@ const register = async (req, res) => {
   }
 };
 
+// function update user
 export const update = async (req, res) => {
   try {
     const body = req.body;
@@ -64,10 +65,14 @@ export const update = async (req, res) => {
   }
 };
 
+// is_lock = false | true
 export const lockUser = async (req, res) => {
   try {
     const body = req.body;
     const { id } = req.params;
+    if (body.password) {
+      body["password"] = bcrypt.hashSync(body.password, 10);
+    }
     const data = await Auth.findByIdAndUpdate(id, body, { new: true });
 
     const response = {
@@ -77,6 +82,7 @@ export const lockUser = async (req, res) => {
 
     return responseSuccess(res, response);
   } catch (error) {
+    // status 
     return responseError(res, error);
   }
 };
@@ -98,14 +104,14 @@ const getAll = async (req, res) => {
     const is_locked = req.query.is_locked || false;
     const perPage = limit * page - limit;
     const data = await Auth.find({
-      fullname: { $regex: search, $options: "i" },
+      username: { $regex: search, $options: "i" },
       role: { $regex: user_role, $options: "i" },
       is_locked,
     })
       .skip(perPage)
       .limit(limit);
     const total = await Auth.countDocuments({
-      fullname: { $regex: search, $options: "i" },
+      username: { $regex: search, $options: "i" },
       role: { $regex: user_role, $options: "i" },
       is_locked,
     });

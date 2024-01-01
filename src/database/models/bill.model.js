@@ -12,13 +12,7 @@ const BillSchema = new Schema(
       type: String,
       required: true,
     },
-    status: {
-      type: String,
-      enum: ["PENDING", "PACKING", "TRANSPORT", "RECEIVED", "CANCELED"],
-      required: true,
-      default: "PENDING",
-    },
-    receiver: {
+    fullName: {
       type: String,
       required: true,
     },
@@ -26,7 +20,7 @@ const BillSchema = new Schema(
       type: String,
       required: true,
     },
-    phone_number: {
+    telephone: {
       type: String,
       required: true,
     },

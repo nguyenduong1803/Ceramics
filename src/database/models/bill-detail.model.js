@@ -11,9 +11,9 @@ const OrderDetailSchema = new Schema(
     },
     product_id: {
       type: mongoose.Types.ObjectId,
-      ref: "productDetail",
+      ref: "product",
       required: true,
-      autopopulate: { select: "_id product_id price name" },
+      autopopulate: { select: "_id img price name" },
     },
     quantity: {
       type: Number,

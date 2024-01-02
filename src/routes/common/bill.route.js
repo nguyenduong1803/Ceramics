@@ -3,7 +3,7 @@ import express from "express";
 
 const billRoute = express.Router();
 
-billRoute.post("/create", billController.create);
+billRoute.post("/create", billController.create); 
 billRoute.post("/update/:id", billController.update);
 billRoute.put("/update-status/:id", billController.updateStatus);
 billRoute.get("/", billController.read);

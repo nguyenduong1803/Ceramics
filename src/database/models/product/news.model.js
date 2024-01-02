@@ -9,13 +9,25 @@ const NewsSchema = new Schema(
     },
     published: {
       type: Boolean,
-      require: true,
+      require: false,
     },
     title: {
       type: String,
     },
     description: {
       type: String,
+    },
+    detail_news: {
+      type: String,
+    },
+    author: {
+      type: String,
+      require: true,
+    },
+    is_locked: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   {

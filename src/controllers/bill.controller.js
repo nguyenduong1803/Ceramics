@@ -148,7 +148,7 @@ export const create = async (req, res) => {
 
     const payment = await paymentRepository.create({
       status: "UNPAID",
-      payment_method: payment_method,
+      payment_method: payment_method, 
     });
 
     const formBody = {

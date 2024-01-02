@@ -22,7 +22,7 @@ const BillSchema = new Schema(
     },
     telephone: {
       type: String,
-      required: true,
+      required: true, 
     },
     note: {
       type: String,

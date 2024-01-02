@@ -1,6 +1,7 @@
 import billRoute from "./bill.route";
 import cartRoute from "./cart.route";
 import commentRoute from "./comment.route";
+import newsRoute from "./news.route";
 import paymentRoute from "./payment.route";
 import statisticRoute from "./statistics.route";
 import voucherRoute from "./voucher.route";
@@ -31,6 +32,10 @@ const commonRoutes = {
     {
       path: "voucher",
       route: voucherRoute,
+    },
+    {
+      path: "news",
+      route: newsRoute,
     },
   ],
 };

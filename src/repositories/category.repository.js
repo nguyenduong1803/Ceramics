@@ -1,4 +1,4 @@
-import categoryModel from "../database/models/product/category.model"; 
+import categoryModel from "../database/models/product/category.model";
 import BaseRepository from "../helpers/BaseRepository";
 
 class CategoryRepository extends BaseRepository {
